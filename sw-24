@@ -1,0 +1,67 @@
+enable
+configure terminal 
+hostname SW-01-REDE2
+banner motd "ACESSO PARA MIM"
+enable secret SenhadaEnable
+service password-encryption
+ip domain-name Rede2.local
+crypto key generate rsa general-keys modulus 1024
+username eliasaf privilege 15 secret 123456
+username eilem privilege 15 secret 123456
+username joao privilege 15 secret 123456
+username lucas privilege 15 secret 123456
+username guilherme privilege 15 secret 123456
+line vty 0 15 
+login local
+password SenhadaTVY
+transport input ssh
+exec-timeout 5 
+exit
+line console 0 
+password SenhadaConsole
+login
+exit
+username elias privilege 15 secret 123456
+service password-encryption
+vlan 10
+name PC-21
+vlan 20
+name PC-22
+vlan 30 
+name PC-23
+vlan 100
+name SRV
+interface fastethernet 0/1
+switchport mode access 
+switchport access vlan 10
+description PC-21
+exit
+interface fastethernet 0/2
+switchport mode access 
+switchport access vlan 20
+description PC-22
+exit
+interface fastethernet 0/3
+switchport mode access 
+switchport access vlan 30
+description PC-23
+exit
+interface gigabitethernet 0/1
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 10,20,30,99,100
+description TRUNK P/ SW-22
+exit
+interface gigabitethernet 0/2
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 10,20,30,99,100
+description TRUNK P/ SW-25
+exit
+interface vlan 100
+ip address 172.16.2.188
+description INTERFACE DE GERENCIAMENTO
+no shutdown
+exit
+ip default-gateway 172.16.2.161
+do wr
